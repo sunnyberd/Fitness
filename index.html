@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Ультра плавный фитнес трекер для тренировок и калорий">
+    
+    <title>Fitness Tracker</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- Главная навигация -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-screen="workout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v18M3 12h18"/>
+            </svg>
+            <span>Тренировки</span>
+        </button>
+        <button class="nav-btn" data-screen="execute">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+            </svg>
+            <span>Сегодня</span>
+        </button>
+        <button class="nav-btn" data-screen="calories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            <span>Калории</span>
+        </button>
+    </nav>
+
+    <!-- Экран 1: Конструктор тренировок -->
+    <div class="screen active" id="workout-screen">
+        <div class="header">
+            <h1>Мои тренировки</h1>
+            <button class="btn-primary" id="add-exercise-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Добавить
+            </button>
+        </div>
+
+        <div class="exercise-list" id="exercise-list">
+            <!-- Упражнения будут добавляться динамически -->
+        </div>
+
+        <div class="empty-state" id="empty-workout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3v18M3 12h18"/>
+            </svg>
+            <p>Нет упражнений</p>
+            <small>Нажмите "Добавить" чтобы создать первое упражнение</small>
+        </div>
+    </div>
+
+    <!-- Экран 2: Выполнение тренировки -->
+    <div class="screen" id="execute-screen">
+        <div class="header">
+            <h1>Тренировка на сегодня</h1>
+            <div class="date-display" id="current-date"></div>
+        </div>
+
+        <div class="execute-list" id="execute-list">
+            <!-- Список упражнений для выполнения -->
+        </div>
+
+        <div class="empty-state" id="empty-execute">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+            </svg>
+            <p>Нет тренировок</p>
+            <small>Добавьте упражнения в разделе "Тренировки"</small>
+        </div>
+    </div>
+
+    <!-- Экран 3: Счетчик калорий -->
+    <div class="screen" id="calories-screen">
+        <div class="header">
+            <h1>Калории</h1>
+        </div>
+
+        <div class="calories-container">
+            <div class="calorie-card">
+                <div class="calorie-display">
+                    <span class="calorie-value" id="calorie-value">0</span>
+                    <span class="calorie-unit">ккал</span>
+                </div>
+                <p class="calorie-label">Сегодня</p>
+            </div>
+
+            <div class="calorie-input-section">
+                <label for="calorie-input">Введите калории</label>
+                <div class="input-group">
+                    <input 
+                        type="number" 
+                        id="calorie-input" 
+                        placeholder="2200" 
+                        min="0"
+                        step="50"
+                    >
+                    <button class="btn-primary" id="save-calories-btn">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+
+            <div class="calorie-history" id="calorie-history">
+                <h3>История</h3>
+                <div class="history-list" id="history-list">
+                    <!-- История калорий -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Добавить/Редактировать упражнение -->
+    <div class="modal" id="exercise-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Добавить упражнение</h2>
+                <button class="close-btn" id="close-modal-btn">&times;</button>
+            </div>
+            <form id="exercise-form">
+                <div class="form-group">
+                    <label for="exercise-name">Название упражнения</label>
+                    <input 
+                        type="text" 
+                        id="exercise-name" 
+                        placeholder="Жим лежа" 
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exercise-sets">Подходы</label>
+                        <input 
+                            type="number" 
+                            id="exercise-sets" 
+                            placeholder="3" 
+                            min="1"
+                            max="99"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise-reps">Повторения</label>
+                        <input 
+                            type="number" 
+                            id="exercise-reps" 
+                            placeholder="10" 
+                            min="1"
+                            max="999"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exercise-weight">Вес (кг)</label>
+                    <input 
+                        type="number" 
+                        id="exercise-weight" 
+                        placeholder="60" 
+                        min="0"
+                        step="0.5"
+                        required
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn-primary" id="submit-btn">
+                        Сохранить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
