@@ -1,0 +1,241 @@
+// ========================================
+// COMPREHENSIVE INDEX.HTML WITH ALL FEATURES
+// ========================================
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Ultimate Fitness Tracker - 120 FPS Performance, i18n Support, Multiple Languages">
+    
+    <title>Fitness Tracker Pro</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --bg-primary: #0f0f1e;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-card-hover: #1e2a47;
+            --accent-primary: #6c5ce7;
+            --accent-secondary: #a29bfe;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #b8bbc4;
+            --text-muted: #6c7293;
+            --success: #00d2a0;
+            --danger: #ff4757;
+            --warning: #ffa502;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        input, textarea, button {
+            user-select: auto;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settings-panel">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2 data-i18n="settings">Settings</h2>
+                <button class="close-settings" id="close-settings">×</button>
+            </div>
+
+            <div class="settings-group">
+                <label data-i18n="language">Language</label>
+                <select id="language-select" class="language-dropdown"></select>
+            </div>
+
+            <div class="settings-group">
+                <label data-i18n="theme">Theme</label>
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="theme-btn"></button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label data-i18n="difficulty">Difficulty</label>
+                <select id="difficulty-select" class="difficulty-dropdown">
+                    <option value="beginner" data-i18n="beginner">Beginner</option>
+                    <option value="intermediate" data-i18n="intermediate" selected>Intermediate</option>
+                    <option value="advanced" data-i18n="advanced">Advanced</option>
+                </select>
+            </div>
+
+            <div class="settings-group">
+                <button class="btn-primary" id="google-auth-btn" data-i18n="signIn">Sign In with Google</button>
+            </div>
+
+            <div class="settings-group">
+                <span id="fps-counter" class="fps-display">FPS: 60</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-screen="workout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9h12M6 15h12M3 7h18M3 17h18"/>
+            </svg>
+            <span data-i18n="myWorkouts">Workouts</span>
+        </button>
+        <button class="nav-btn" data-screen="execute">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"/>
+            </svg>
+            <span data-i18n="today">Today</span>
+        </button>
+        <button class="nav-btn" data-screen="calories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            <span data-i18n="calories">Calories</span>
+        </button>
+        <button class="nav-btn" data-screen="settings" id="settings-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="1"/>
+                <path d="M12 1v6m0 6v6"/>
+                <path d="M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24"/>
+                <path d="M1 12h6m6 0h6"/>
+                <path d="M4.22 19.78l4.24-4.24m3.08-3.08l4.24-4.24"/>
+            </svg>
+            <span data-i18n="settings">Settings</span>
+        </button>
+    </nav>
+
+    <!-- Workout Screen -->
+    <div class="screen active" id="workout-screen">
+        <div class="header">
+            <h1 data-i18n="myWorkouts">My Workouts</h1>
+            <button class="btn-primary" id="add-exercise-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span data-i18n="add">Add</span>
+            </button>
+        </div>
+
+        <div class="exercise-list" id="exercise-list"></div>
+
+        <div class="empty-state" id="empty-workout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 3v18M3 12h18"/>
+            </svg>
+            <p data-i18n="noExercises">No exercises</p>
+            <small data-i18n="noExercisesDesc">Click Add to create your first exercise</small>
+        </div>
+    </div>
+
+    <!-- Execute Screen -->
+    <div class="screen" id="execute-screen">
+        <div class="header">
+            <h1 data-i18n="today">Today's Workout</h1>
+            <div class="date-display" id="current-date"></div>
+        </div>
+
+        <div class="execute-list" id="execute-list"></div>
+
+        <div class="empty-state" id="empty-execute">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 11l3 3L22 4"/>
+            </svg>
+            <p data-i18n="noWorkouts">No workouts</p>
+        </div>
+    </div>
+
+    <!-- Calories Screen -->
+    <div class="screen" id="calories-screen">
+        <div class="header">
+            <h1 data-i18n="calories">Calories</h1>
+        </div>
+
+        <div class="calories-container">
+            <div class="calorie-card">
+                <div class="calorie-display">
+                    <span class="calorie-value" id="calorie-value">0</span>
+                    <span class="calorie-unit">kcal</span>
+                </div>
+                <p class="calorie-label" data-i18n="today_label">Today</p>
+            </div>
+
+            <div class="calorie-input-section">
+                <label for="calorie-input" data-i18n="enterCalories">Enter Calories</label>
+                <div class="input-group">
+                    <input type="number" id="calorie-input" placeholder="2200" min="0" step="50">
+                    <button class="btn-primary" id="save-calories-btn" data-i18n="save">Save</button>
+                </div>
+            </div>
+
+            <div class="calorie-history">
+                <h3 data-i18n="history">History</h3>
+                <div class="history-list" id="history-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Modal -->
+    <div class="modal" id="exercise-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title" data-i18n="addExercise">Add Exercise</h2>
+                <button class="close-btn" id="close-modal-btn">×</button>
+            </div>
+            <form id="exercise-form">
+                <div class="form-group">
+                    <label for="exercise-name" data-i18n="exerciseName">Exercise Name</label>
+                    <input type="text" id="exercise-name" placeholder="Bench Press" required autocomplete="off">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exercise-sets" data-i18n="sets">Sets</label>
+                        <input type="number" id="exercise-sets" placeholder="3" min="1" max="99" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exercise-reps" data-i18n="reps">Reps</label>
+                        <input type="number" id="exercise-reps" placeholder="10" min="1" max="999" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exercise-weight" data-i18n="weight">Weight (kg)</label>
+                    <input type="number" id="exercise-weight" placeholder="60" min="0" step="0.5" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn" data-i18n="cancel">Cancel</button>
+                    <button type="submit" class="btn-primary" data-i18n="save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="performance.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
